@@ -1,33 +1,101 @@
 #include <iostream>
 #include <string>
-#include "Image_Class.h"
+#include"Image_Class.h"
 using namespace std;
 
-int main() {
-    cout << "Image processing program started!" << endl;
+        
+        //Filter 2: Black and White
 
-    string filename;
-    cout << "Enter image file name: ";
-    cin >> filename;
+         void BlackandWhite(Image &img){
+            int width = img.width;
+            int height = img.height;
+            int channels = img.channels;
 
-    Image img;
-    if (!img.loadNewImage(filename)) {
-        cout << "File does not exist\n";
-        return 1;
+            for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+            unsigned char r = img(x, y, 0);
+            unsigned char g = img(x, y, 1);
+            unsigned char b = img(x, y, 2);
+            
+            int gray =(r+g+b) / 3;
+            if (gray>=128){
+            img(x, y, 0)=img(x, y, 1)=img(x, y, 2) =255 ;
+            }
+            else{
+            img(x, y, 0)=img(x, y, 1)=img(x, y, 2)= 0;
+            }
+        }
     }
+}
 
+    //Filter 5: Flip Image
+    void FlipImage (Image &img){
+
+        int width = img.width;
+        int height = img.height;
+        int channels = img.channels;
+
+        cout << "choose : \n 1.Flipped Vertical \n 2.Flipped Horizontally " ;
+        int m ;
+        cin>>m ;
+
+        if(m==1){
+        for (int y = 0; y < height/2; y++) {
+        for (int x = 0; x < width; x++) {
+        for(int c =0 ; c<channels ; c++){
+            int temp = img(x,y,c) ;
+            img(x, y, c) = img( x,height-1- y, c);
+            img(x,height-1- y, c) = temp;
+        }
+    }
+}
+
+        if(m==2){
+        for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width/2; x++) {
+        for(int c =0 ; c<channels ; c++){
+            int temp = img(x,y,c) ;
+            img(x, y, c) = img(width - 1 - x, y, c);
+            img(width - 1 - x, y, c) = temp;
+            }
+          } 
+        }
+        
+   } 
+ }
+}
+
+
+int main(){
+    string filename ;
+    cout << "Enter image file name " ;
+    cin >> filename ;
+    
+    Image img(filename); 
+    if (!img.loadNewImage(filename)) {
+    cout << "File does not exist";
+    return 1 ;
+     }  
     cout << "Choose filter:\n"
-         << "1: Grayscale Conversion\n"
-         << "2: Black and White\n"
-         << "3: Invert Image\n"
-         << "4: Merge Images\n"
-         << "5: Flip Image\n"
-         << "6: Rotate Image\n";
+            << "1: Grayscale Conversion\n"
+            << "2: Black and White\n" 
+            << "3: Invert Image\n"
+            << "4: Merge Images\n"
+            << "5: Flip Image\n"
+            << "6: Rotate Image\n";
+            int n ;
+            cin >> n;
 
-    int n;
-    cin >> n;
-
-    cout << "You chose option " << n << endl;
-
-    return 0;
+    if (n==2){
+        BlackandWhite(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+            }
+       
+    if(n==5){
+       FlipImage(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
+     return 0;
 }
