@@ -43,21 +43,6 @@ void Grayscale(Image &img) {
     }
 }
 
-// filter7: light dark
-void filterLightDark(Image &img, double percent) {
-    double factor = percent / 100.0; // 50% → 0.5، -50% → -0.5
-    for (int y = 0; y < img.height; y++) {
-        for (int x = 0; x < img.width; x++) {
-            for (int c = 0; c < 3; c++) { // R,G,B
-                int value = img(x, y, c);
-                value = static_cast<int>(value * (1 + factor));
-                if (value > 255) value = 255;
-                if (value < 0) value = 0;
-                img(x, y, c) = static_cast<unsigned char>(value);
-            }
-        }
-    }
-}
 
 int main() {
     cout << "Image processing program started!" << endl;
