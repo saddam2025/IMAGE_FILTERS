@@ -3,97 +3,26 @@
 #include "Image_Class.h"
 using namespace std;
 
-// filter 1: Grayscale
-void Grayscale(Image &img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            unsigned int avg = 0;
-            for (int k = 0; k < 3; ++k) {
-                avg += img(i, j, k);
-            }
-            avg /= 3;
-            img(i, j, 0) = avg;
-            img(i, j, 1) = avg;
-            img(i, j, 2) = avg;
-        }
-    }
-}
-
-// filter7: light dark
-void filterLightDark(Image &img, double percent) {
-    double factor = percent / 100.0; // 50% → 0.5، -50% → -0.5
-#include <iostream>
-#include <string>
-#include "Image_Class.h"
-using namespace std;
-
-// filter 1: Grayscale
-void Grayscale(Image &img) {
-    for (int i = 0; i < img.width; ++i) {
-        for (int j = 0; j < img.height; ++j) {
-            unsigned int avg = 0;
-            for (int k = 0; k < 3; ++k) {
-                avg += img(i, j, k);
-            }
-            avg /= 3;
-            img(i, j, 0) = avg;
-            img(i, j, 1) = avg;
-            img(i, j, 2) = avg;
-        }
-    }
-}
-
-
-int main() {
-    cout << "Image processing program started!" << endl;
-
-    string filename;
-    cout << "Enter first image file name: ";
-    cin >> filename;
-
-    Image img;
+int main(){
+    string filename ;
+    cout << "Enter image file name " ;
+    cin >> filename ;
+    
+    Image img(filename); 
     if (!img.loadNewImage(filename)) {
-        cout << "File does not exist\n";
-        return 1;
-    }
-
-    cout  << "Choose filter:\n"
-         << "1: Grayscale Conversion\n"
-         << "2: Black and White\n"
-         << "3: Invert Image\n"
-         << "4: Merge Images\n"
-         << "5: Flip Image\n"
-         << "6: Rotate Image\n"
-         << "7: Darken and Lighten Image/n";
-    int n;
-    cin >> n;
-    cin.get(); 
-
-    if (n == 1) { 
-        Grayscale(img);
-        cout << "Enter new file name to save: ";
-        cin >> filename;
-        img.saveImage(filename);
-    }
-    else if (n == 7) {
-        
-    double percent;
-    cout << "Enter lighting change (-50 to 50 for 50% darken/lighten): ";
-    cin >> percent;
-    filterLightDark(img, percent);
-    cout << "Image processed successfully!\n";
-
-
-
-        cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
-    }
-    else {
-        cout << "Invalid option!\n";
-    }
-
-    cout << "You chose option " << n << endl;
+    cout << "File does not exist";
+    return 1 ;
+     }  
+    cout << "Choose filter:\n"
+            << "1: Grayscale Conversion\n"
+            << "2: Black and White\n" 
+            << "3: Invert Image\n"
+            << "4: Merge Images\n"
+            << "5: Flip Image\n"
+            << "6: Rotate Image\n";
+            << "7: Darken and Lighten Image\n";
+            int n ;
+            cin >> n;
 
     return 0;
 }
