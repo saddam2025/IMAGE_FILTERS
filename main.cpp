@@ -47,55 +47,8 @@ using namespace std;
             img(x, y, c) = img( x,height-1- y, c);
             img(x,height-1- y, c) = temp;
         }
-    }
-}
-
-        if(m==2){
-        for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width/2; x++) {
-        for(int c =0 ; c<channels ; c++){
-            int temp = img(x,y,c) ;
-            img(x, y, c) = img(width - 1 - x, y, c);
-            img(width - 1 - x, y, c) = temp;
-            }
-          } 
-        }
-        
-   } 
+   }
+  }
  }
 }
-
-
-int main(){
-    string filename ;
-    cout << "Enter image file name " ;
-    cin >> filename ;
-    
-    Image img(filename); 
-    if (!img.loadNewImage(filename)) {
-    cout << "File does not exist";
-    return 1 ;
-     }  
-    cout << "Choose filter:\n"
-            << "1: Grayscale Conversion\n"
-            << "2: Black and White\n" 
-            << "3: Invert Image\n"
-            << "4: Merge Images\n"
-            << "5: Flip Image\n"
-            << "6: Rotate Image\n";
-            int n ;
-            cin >> n;
-
-    if (n==2){
-        BlackandWhite(img);
-        img.saveImage("output.png");
-        cout << "Saved output.png\n";
-            }
-       
-    if(n==5){
-       FlipImage(img);
-        img.saveImage("output.png");
-        cout << "Saved output.png\n";
-    }
-     return 0;
-}
+     
