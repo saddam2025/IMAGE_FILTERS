@@ -1,3 +1,7 @@
+#include <iostream>
+#include <string>
+#include"Image_Class.h"
+using namespace std;
 int main(){
     string filename ;
     cout << "Enter image file name " ;
