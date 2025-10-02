@@ -35,30 +35,6 @@ void filterLightDark(Image &img, double percent) {
     }
 }
 
-int main() {
-    cout << "Image processing program started!" << endl;
-
-    string filename;
-    cout << "Enter first image file name: ";
-    cin >> filename;
-
-    Image img;
-    if (!img.loadNewImage(filename)) {
-        cout << "File does not exist\n";
-        return 1;
-    }
-
-    cout  << "Choose filter:\n"
-         << "1: Grayscale Conversion\n"
-         << "2: Black and White\n"
-         << "3: Invert Image\n"
-         << "4: Merge Images\n"
-         << "5: Flip Image\n"
-         << "6: Rotate Image\n"
-         << "7: Darken and Lighten Image\n";
-    int n;
-    cin >> n;
-    cin.get(); 
 
     if (n == 1) { 
         Grayscale(img);
