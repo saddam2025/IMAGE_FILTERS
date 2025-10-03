@@ -18,13 +18,14 @@ int main(){
             << "3: Invert Image\n"
             << "4: Merge Images\n"
             << "5: Flip Image\n"
-            << "6: Rotate Image\n";
-            << "7: Darken and Lighten Image\n";
+            << "6: Rotate Image\n"
+            << "7: Darken and Lighten Image\n"
+            << "8: Crop Image\n";
 
             int n ;
             cin >> n;
 
-       if (n == 1) { 
+     if (n == 1) { 
         Grayscale(img);
         cout << "Enter new file name to save: ";
         cin >> filename;
@@ -37,11 +38,11 @@ int main(){
         cout << "Saved output.png\n";
             }
 
-                else if (n == 3) {
+      else if (n == 3) {
         invert(img);
         img.saveImage("after_inverted.png");
     } 
-       else if (n == 3) {
+     else if (n == 3) {
         invert(img);
         img.saveImage("after_inverted.png");
     }
@@ -52,7 +53,7 @@ int main(){
         cout << "Saved output.png\n";
     }
 
-         else if (n == 6) {
+      else if (n == 6) {
         int a;
         cout<<"select your angle ( 90 , 180 , 270 , 360 )"<<endl;
         cin>>a;
@@ -66,6 +67,11 @@ int main(){
     filterLightDark(img, percent);
     cout << "Image processed successfully!\n";
       }
+    else if(n==8){
+        CropImages(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
 
      return 0;
 }
