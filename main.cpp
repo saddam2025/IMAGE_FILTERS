@@ -51,4 +51,33 @@ using namespace std;
   }
  }
 }
-     
+
+//Filter 8: Crop Images
+void CropImages(Image &img){
+    int width = img.width;
+    int height = img.height;
+    int channels = img.channels;
+
+    int x,y,w,h ;
+    cout << "Enter starting point (x y):" ;
+    cin >> x >> y ;
+    cout << "Enter crop width and height:" ;
+    cin >> w >>h ;
+
+    if (x < 0 || y < 0 || x + w > width || y + h > height) {
+    cout << "Invalid crop dimensions!" << endl;
+    return;
+}
+   Image cropped(w,h);
+
+   for (int i=0 ;i<h ; i++){
+    for (int j=0 ;j<w ; j++){
+        for (int c=0 ; c<channels;c++){
+         cropped(j,i,c) = img(j+x, i+y, c);
+
+
+        }
+    }
+   }
+  img=cropped;
+}    
