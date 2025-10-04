@@ -20,7 +20,9 @@ int main(){
             << "5: Flip Image\n"
             << "6: Rotate Image\n"
             << "7: Darken and Lighten Image\n"
-            << "8: Crop Image\n";
+            << "8: Crop Image\n"
+            << "9: Adding a Frame to the Picture\n"
+            << "10: Detect Image Edges\n";
 
             int n ;
             cin >> n;
