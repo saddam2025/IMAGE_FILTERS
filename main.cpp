@@ -73,14 +73,18 @@ void detectEdges(Image &img) {
 
     if (n == 1) { 
         Grayscale(img);
-        
+         cout << "Enter new file name: ";
+        cin >> filename;
+        img.saveImage(filename);
     else if (n == 7) {
         
     double percent;
     cout << "Enter lighting change (-50 to 50 for 50% darken/lighten): ";
     cin >> percent;
     filterLightDark(img, percent);
-    
+     cout << "Enter new file name: ";
+        cin >> filename;
+        img.saveImage(filename);
         
     else if (n == 10) {
     detectEdges(img); 
