@@ -35,23 +35,55 @@ void filterLightDark(Image &img, double percent) {
     }
 }
 
+// Filter 10: Detect Image Edges
+void convertToGrayscale(Image &img) {
+    for (int y = 0; y < img.height; ++y) {
+        for (int x = 0; x < img.width; ++x) {
+            unsigned char r = img(x,y,0);
+            unsigned char g = img(x,y,1);
+            unsigned char b = img(x,y,2);
+            unsigned char gray = static_cast<unsigned char>((r + g + b) / 3);
+            img(x,y,0) = img(x,y,1) = img(x,y,2) = gray;
+        }
+    }
+}
+
+
+void detectEdges(Image &img) {
+    convertToGrayscale(img); 
+    Image copy = img;        
+
+    for (int y = 1; y < img.height - 1; ++y) {
+        for (int x = 1; x < img.width - 1; ++x) {
+            int gx = -copy(x-1,y-1,0) - 2*copy(x-1,y,0) - copy(x-1,y+1,0)
+                     + copy(x+1,y-1,0) + 2*copy(x+1,y,0) + copy(x+1,y+1,0);
+            int gy = -copy(x-1,y-1,0) - 2*copy(x,y-1,0) - copy(x+1,y-1,0)
+                     + copy(x-1,y+1,0) + 2*copy(x,y+1,0) + copy(x+1,y+1,0);
+
+            int magnitude = sqrt(gx*gx + gy*gy);
+            magnitude /= 1.5;
+            if (magnitude > 255) magnitude = 255;
+
+            unsigned char inverted = static_cast<unsigned char>(255 - magnitude);
+            img(x,y,0) = img(x,y,1) = img(x,y,2) = inverted;
+        }
+    }
+}
+
 
     if (n == 1) { 
         Grayscale(img);
-        cout << "Enter new file name to save: ";
-        cin >> filename;
-        img.saveImage(filename);
-    }
+        
     else if (n == 7) {
         
     double percent;
     cout << "Enter lighting change (-50 to 50 for 50% darken/lighten): ";
     cin >> percent;
     filterLightDark(img, percent);
-    cout << "Image processed successfully!\n";
-
-
-
+    
+        
+    else if (n == 10) {
+    detectEdges(img); 
         cout << "Enter new file name: ";
         cin >> filename;
         img.saveImage(filename);
@@ -60,7 +92,7 @@ void filterLightDark(Image &img, double percent) {
         cout << "Invalid option!\n";
     }
 
-    cout << "You chose option " << n << endl;
+     cout << "Edge detection done! Saved as " << filename << endl;
 
     return 0;
 }
