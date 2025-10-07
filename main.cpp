@@ -19,6 +19,67 @@ void Grayscale(Image &img) {
     }
 }
 
+// Filter 4: Merge Images
+void ResizingImages(Image &img, int newW, int newH) {
+    int width = img.width;
+    int height = img.height;
+    int channels = img.channels;
+
+    Image resized(newW, newH);
+
+    double scaleX = (double)width / newW;
+    double scaleY = (double)height / newH;
+
+    for (int y = 0; y < newH; y++) {
+        for (int x = 0; x < newW; x++) {
+            for (int c = 0; c < channels; c++) {
+                int oldX = (int)(x * scaleX);
+                int oldY = (int)(y * scaleY);
+                resized(x, y, c) = img(oldX, oldY, c);
+            }
+        }
+    }
+
+    img = resized;
+}
+void mergeImages(Image &img1, Image &img2, Image &result) {
+    if (img1.width == img2.width && img1.height == img2.height) {
+        cout << "Images are the same size. Merging directly...\n";
+        result = Image(img1.width, img1.height);
+        for (int y = 0; y < img1.height; y++) {
+            for (int x = 0; x < img1.width; x++) {
+                for (int c = 0; c < img1.channels; c++) {
+                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
+                }
+            }
+        }
+    }
+    else if (img1.width > img2.width || img1.height > img2.height) {
+        cout << "First image is larger. Resizing first image...\n";
+        ResizingImages(img1, img2.width, img2.height);
+        result = Image(img2.width, img2.height);
+        for (int y = 0; y < img2.height; y++) {
+            for (int x = 0; x < img2.width; x++) {
+                for (int c = 0; c < img1.channels; c++) {
+                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
+                }
+            }
+        }
+    }
+    else {
+        cout << "Second image is larger. Resizing second image...\n";
+        ResizingImages(img2, img1.width, img1.height);
+        result = Image(img1.width, img1.height);
+        for (int y = 0; y < img1.height; y++) {
+            for (int x = 0; x < img1.width; x++) {
+                for (int c = 0; c < img1.channels; c++) {
+                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
+                }
+            }
+        }
+    }
+}
+
 // filter7: light dark
 void filterLightDark(Image &img, double percent) {
     double factor = percent / 100.0; // 50% → 0.5، -50% → -0.5
@@ -47,8 +108,6 @@ void convertToGrayscale(Image &img) {
         }
     }
 }
-
-
 void detectEdges(Image &img) {
     convertToGrayscale(img); 
     Image copy = img;        
@@ -71,27 +130,44 @@ void detectEdges(Image &img) {
 }
 
 
-    if (n == 1) { 
+if (n == 1) {
         Grayscale(img);
-         cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
-    else if (n == 7) {
-        
-    double percent;
-    cout << "Enter lighting change (-50 to 50 for 50% darken/lighten): ";
-    cin >> percent;
-    filterLightDark(img, percent);
-     cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
-        
-    else if (n == 10) {
-    detectEdges(img); 
         cout << "Enter new file name: ";
         cin >> filename;
         img.saveImage(filename);
-    }
+    } 
+    else if (n == 4) {
+        string file2;
+        cout << "Enter second image file name: ";
+        cin >> file2;
+        Image img2(file2);
+        if (!img2.loadNewImage(file2)) {
+            cout << "Error: Second file not found.\n";
+            return 1;
+        }
+        Image result(0, 0);
+        mergeImages(img, img2, result);
+        cout << "Enter output file name: ";
+        cin >> filename;
+        result.saveImage(filename);
+    } 
+    else if (n == 7) {
+        double percent;
+        cout << "Enter lighting change (-50 to 50): ";
+        cin >> percent;
+        filterLightDark(img, percent);
+        cout << "Enter new file name: ";
+        cin >> filename;
+        img.saveImage(filename);
+    } 
+    else if (n == 10) {
+        detectEdges(img);
+        cout << "Enter new file name: ";
+        cin >> filename;
+        img.saveImage(filename);
+        cout << "Edge detection done!\n";
+    } 
+        
     else {
         cout << "Invalid option!\n";
     }
