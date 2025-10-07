@@ -40,15 +40,25 @@ int main(){
         cout << "Saved output.png\n";
             }
 
-      else if (n == 3) {
+    else if (n == 3) {
         invert(img);
         img.saveImage("after_inverted.png");
+    }       
+    else if (n == 4) {
+        string file2;
+        cout << "Enter second image file name: ";
+        cin >> file2;
+        Image img2(file2);
+          if (!img2.loadNewImage(file2)) {
+            cout << "Error: Second file not found.\n";
+            return 1;
+        }
+        Image result(0, 0);
+        mergeImages(img, img2, result);
+        cout << "Enter output file name: ";
+        cin >> filename;
+        result.saveImage(filename);
     } 
-     else if (n == 3) {
-        invert(img);
-        img.saveImage("after_inverted.png");
-    }
-       
      else if(n==5){
        FlipImage(img);
         img.saveImage("output.png");
