@@ -74,6 +74,11 @@ int main(){
         img.saveImage("output.png");
         cout << "Saved output.png\n";
     }
+     else if(n==11){
+        ResizingImages(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
 
      return 0;
 }
