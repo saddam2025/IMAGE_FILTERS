@@ -2,8 +2,9 @@
 #include <string>
 #include"Image_Class.h"
 using namespace std;
-       
- //Filter 2: Black and White
+
+        
+        //Filter 2: Black and White
 
          void BlackandWhite(Image &img){
             int width = img.width;
@@ -27,7 +28,7 @@ using namespace std;
     }
 }
 
-//Filter 5: Flip Image
+    //Filter 5: Flip Image
     void FlipImage (Image &img){
 
         int width = img.width;
@@ -133,5 +134,51 @@ void ResizingImages(Image &img){
     img= resizing;  
         
 }
-        
-      
+
+
+int main(){
+    string filename ;
+    cout << "Enter image file name " ;
+    cin >> filename ;
+    
+    Image img(filename); 
+    if (!img.loadNewImage(filename)) {
+    cout << "File does not exist";
+    return 1 ;
+     }  
+    cout << "Choose filter:\n"
+            << "1: Grayscale Conversion\n"
+            << "2: Black and White\n" 
+            << "3: Invert Image\n"
+            << "4: Merge Images\n"
+            << "5: Flip Image\n"
+            << "6: Rotate Image\n"
+            << "8: Crop Image\n"
+            << "11: Resizing Images\n";
+
+            int n ;
+            cin >> n;
+
+    if (n==2){
+        BlackandWhite(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+            }
+       
+    else if(n==5){
+       FlipImage(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
+     else if(n==8){
+        CropImages(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
+     else if(n==11){
+        ResizingImages(img);
+        img.saveImage("output.png");
+        cout << "Saved output.png\n";
+    }
+     return 0;
+}
