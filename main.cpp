@@ -5,520 +5,267 @@
 using namespace std;
 
 
-        //Filter 2: Black and White
-
-         void BlackandWhite(Image &img){
-            int width = img.width;
-            int height = img.height;
-            int channels = img.channels;
-
-            for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-            unsigned char r = img(x, y, 0);
-            unsigned char g = img(x, y, 1);
-            unsigned char b = img(x, y, 2);
-
-            int gray =(r+g+b) / 3;
-            if (gray>=128){
-            img(x, y, 0)=img(x, y, 1)=img(x, y, 2) =255 ;
-            }
-            else{
-            img(x, y, 0)=img(x, y, 1)=img(x, y, 2)= 0;
-            }
-        }
-    }
-}
-
-    //Filter 5: Flip Image
-    void FlipImage (Image &img){
-
-        int width = img.width;
-        int height = img.height;
-        int channels = img.channels;
-
-        cout << "choose : \n 1.Flipped Vertical \n 2.Flipped Horizontally " ;
-        int m ;
-        cin>>m ;
-
-        if(m==1){
-        for (int y = 0; y < height/2; y++) {
-        for (int x = 0; x < width; x++) {
-        for(int c =0 ; c<channels ; c++){
-            int temp = img(x,y,c) ;
-            img(x, y, c) = img( x,height-1- y, c);
-            img(x,height-1- y, c) = temp;
-        }
-    }
-}
-
-        if(m==2){
-        for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width/2; x++) {
-        for(int c =0 ; c<channels ; c++){
-            int temp = img(x,y,c) ;
-            img(x, y, c) = img(width - 1 - x, y, c);
-            img(width - 1 - x, y, c) = temp;
-            }
-          }
-        }
-
-   }
- }
-}
-
-//Filter 8: Crop Images
-void CropImages(Image &img){
-    int width =img.width;
-    int height =img.height;
-    int channels =img.channels;
-
-    int x,y,w,h ;
-    cout << "Enter starting point (x y):" ;
-    cin >> x >> y ;
-    cout << "Enter crop width and height:" ;
-    cin >> w >>h ;
-
-    if (x<0|| y<0|| x+w>width || y+h>height ) {
-    cout << "Invalid crop dimensions!" << endl;
-    return;
-}
-   Image cropped(w,h);
-
-   for (int i=0 ;i<h ; i++){
-    for (int j=0 ;j<w ; j++){
-        for (int c=0 ; c<channels;c++){
-         cropped(j,i,c) = img(j+x, i+y, c);
-
-
-        }
-    }
-   }
-  img=cropped;
-}
-
-//Filter 11: Resizing Images
-void ResizingImages(Image &img){
-    int width = img.width;
-    int height = img.height;
-    int channels = img.channels;
-
-    cout<<"choose resizing by : 1.new dimensions\n 2.ratio ";
-    int m ;
-    cin>>m ;
-    int h,w;
-    if(m==1){
-        cout<<"inter new width and higth ";
-        cin >> h >> w ;
-        }
-
-    if (m==2){
-        double ratio ;
-        cout <<"inter the ratio ";
-        cin >>ratio ;
-        w= ratio*width;
-        h= ratio*height;
-    }
-        Image resizing(w,h) ;
-
-        double scalex = width / w ;
-        double scaley = height / h ;
-
-        for (int y=0 ;y<h ; y++){
-        for (int x=0 ;x<w ; x++){
-        for (int c=0 ; c<channels;c++){
-            int oldx =(int) (x*scalex) ;
-            int oldy= (int) (y*scaley);
-            resizing(x, y, c) = img(oldx, oldy, c);
-        }
-    }
-}
-    img= resizing;
-
-}
-// filter 1: Grayscale
+// Filter 1: Grayscale
 void Grayscale(Image &img) {
-    for (int i = 0; i < img.width; ++i) {
+    for (int i = 0; i < img.width; ++i)
         for (int j = 0; j < img.height; ++j) {
             unsigned int avg = 0;
-            for (int k = 0; k < 3; ++k) {
-                avg += img(i, j, k);
-            }
+            for (int k = 0; k < 3; ++k) avg += img(i, j, k);
             avg /= 3;
-            img(i, j, 0) = avg;
-            img(i, j, 1) = avg;
-            img(i, j, 2) = avg;
+            img(i, j, 0) = img(i, j, 1) = img(i, j, 2) = avg;
         }
-    }
 }
 
-// Filter 4: Merge Images
-void ResizingImages(Image &img, int newW, int newH) {
-    int width = img.width;
-    int height = img.height;
-    int channels = img.channels;
-
-    Image resized(newW, newH);
-
-    double scaleX = (double)width / newW;
-    double scaleY = (double)height / newH;
-
-    for (int y = 0; y < newH; y++) {
-        for (int x = 0; x < newW; x++) {
-            for (int c = 0; c < channels; c++) {
-                int oldX = (int)(x * scaleX);
-                int oldY = (int)(y * scaleY);
-                resized(x, y, c) = img(oldX, oldY, c);
-            }
-        }
-    }
-
-    img = resized;
-}
-void mergeImages(Image &img1, Image &img2, Image &result) {
-    if (img1.width == img2.width && img1.height == img2.height) {
-        cout << "Images are the same size. Merging directly...\n";
-        result = Image(img1.width, img1.height);
-        for (int y = 0; y < img1.height; y++) {
-            for (int x = 0; x < img1.width; x++) {
-                for (int c = 0; c < img1.channels; c++) {
-                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
-                }
-            }
-        }
-    }
-    else if (img1.width > img2.width || img1.height > img2.height) {
-        cout << "First image is larger. Resizing first image...\n";
-        ResizingImages(img1, img2.width, img2.height);
-        result = Image(img2.width, img2.height);
-        for (int y = 0; y < img2.height; y++) {
-            for (int x = 0; x < img2.width; x++) {
-                for (int c = 0; c < img1.channels; c++) {
-                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
-                }
-            }
-        }
-    }
-    else {
-        cout << "Second image is larger. Resizing second image...\n";
-        ResizingImages(img2, img1.width, img1.height);
-        result = Image(img1.width, img1.height);
-        for (int y = 0; y < img1.height; y++) {
-            for (int x = 0; x < img1.width; x++) {
-                for (int c = 0; c < img1.channels; c++) {
-                    result(x, y, c) = (img1(x, y, c) + img2(x, y, c)) / 2;
-                }
-            }
-        }
-    }
-}
-
-// filter7: light dark
-void filterLightDark(Image &img, double percent) {
-    double factor = percent / 100.0; // 50% → 0.5، -50% → -0.5
-    for (int y = 0; y < img.height; y++) {
+// Filter 2: Black and White
+void BlackandWhite(Image &img) {
+    for (int y = 0; y < img.height; y++)
         for (int x = 0; x < img.width; x++) {
-            for (int c = 0; c < 3; c++) { // R,G,B
-                int value = img(x, y, c);
-                value = static_cast<int>(value * (1 + factor));
-                if (value > 255) value = 255;
-                if (value < 0) value = 0;
-                img(x, y, c) = static_cast<unsigned char>(value);
-            }
+            int gray = (img(x, y, 0) + img(x, y, 1) + img(x, y, 2)) / 3;
+            if (gray >= 128) gray = 255; else gray = 0;
+            img(x, y, 0) = img(x, y, 1) = img(x, y, 2) = gray;
         }
+}
+
+// Filter 3: Invert
+void invert(Image &img) {
+    for (int y=0;y<img.height;y++)
+        for (int x=0;x<img.width;x++)
+            for (int c=0;c<img.channels;c++)
+                img(x,y,c) = 255 - img(x,y,c);
+}
+
+void ResizingImages(Image &img, int newW, int newH);
+// Filter 4: Merge Images
+void mergeImages(Image &img1, Image &img2, Image &result) {
+    // Resize if different sizes
+    if (img1.width != img2.width || img1.height != img2.height) {
+        if (img1.width*img1.height > img2.width*img2.height)
+            ResizingImages(img1, img2.width, img2.height);
+        else
+            ResizingImages(img2, img1.width, img1.height);
+    }
+    result = Image(img1.width, img1.height);
+    for (int y=0;y<img1.height;y++)
+        for (int x=0;x<img1.width;x++)
+            for (int c=0;c<img1.channels;c++)
+                result(x,y,c) = (img1(x,y,c)+img2(x,y,c))/2;
+}
+
+// Filter 5: Flip Image
+void FlipImage(Image &img){
+    int choice;
+    cout << "1: Vertical Flip, 2: Horizontal Flip: ";
+    cin >> choice;
+    int w=img.width, h=img.height, c=img.channels;
+    if (choice==1)
+        for(int y=0;y<h/2;y++)
+            for(int x=0;x<w;x++)
+                for(int ch=0;ch<c;ch++)
+                    swap(img(x,y,ch), img(x,h-1-y,ch));
+    else if(choice==2)
+        for(int y=0;y<h;y++)
+            for(int x=0;x<w/2;x++)
+                for(int ch=0;ch<c;ch++)
+                    swap(img(x,y,ch), img(w-1-x,y,ch));
+}
+
+// Filter 6: Rotate
+void rotate(Image &img,int angle) {
+    // Only 90,180,270 supported
+    int w=img.width,h=img.height,c=img.channels;
+    Image temp=img;
+    if(angle==90){
+        Image rotated(h,w);
+        for(int y=0;y<h;y++)
+            for(int x=0;x<w;x++)
+                for(int ch=0;ch<c;ch++)
+                    rotated(y,w-1-x,ch) = img(x,y,ch);
+        img=rotated;
+    }
+    else if(angle==180)
+        for(int y=0;y<h;y++)
+            for(int x=0;x<w;x++)
+                for(int ch=0;ch<c;ch++)
+                    img(w-1-x,h-1-y,ch) = temp(x,y,ch);
+    else if(angle==270){
+        Image rotated(h,w);
+        for(int y=0;y<h;y++)
+            for(int x=0;x<w;x++)
+                for(int ch=0;ch<c;ch++)
+                    rotated(h-1-y,x,ch) = img(x,y,ch);
+        img=rotated;
     }
 }
 
-// Filter 10: Detect Image Edges
-void convertToGrayscale(Image &img) {
-    for (int y = 0; y < img.height; ++y) {
-        for (int x = 0; x < img.width; ++x) {
-            unsigned char r = img(x,y,0);
-            unsigned char g = img(x,y,1);
-            unsigned char b = img(x,y,2);
-            unsigned char gray = static_cast<unsigned char>((r + g + b) / 3);
-            img(x,y,0) = img(x,y,1) = img(x,y,2) = gray;
-        }
-    }
+// Filter 7: Light/Dark
+void filterLightDark(Image &img, double percent) {
+    double factor=percent/100.0;
+    for(int y=0;y<img.height;y++)
+        for(int x=0;x<img.width;x++)
+            for(int c=0;c<3;c++){
+                int val=img(x,y,c)*(1+factor);
+                if(val>255) val=255;
+                if(val<0) val=0;
+                img(x,y,c)=val;
+            }
 }
-void detectEdges(Image &img) {
+
+// Filter 8: Crop
+void CropImages(Image &img){
+    int x,y,w,h;
+    cout<<"Enter start x y: "; cin>>x>>y;
+    cout<<"Enter width height: "; cin>>w>>h;
+    if(x<0||y<0||x+w>img.width||y+h>img.height){cout<<"Invalid dimensions!\n"; return;}
+    Image cropped(w,h);
+    for(int i=0;i<h;i++)
+        for(int j=0;j<w;j++)
+            for(int ch=0;ch<img.channels;ch++)
+                cropped(j,i,ch)=img(j+x,i+y,ch);
+    img=cropped;
+}
+
+// Filter 9: Frame
+void frame(Image &img){ for(int y=0;y<img.height;y++) for(int x=0;x<img.width;x++) if(x<20||x>=img.width-20||y<20||y>=img.height-20){img.setPixel(x,y,0,100);img.setPixel(x,y,1,25);img.setPixel(x,y,2,90);} }
+void frameb(Image &img){ for(int y=0;y<img.height;y++) for(int x=0;x<img.width;x++) if(x<20||x>=img.width-20||y<20||y>=img.height-20){int r=100,g=(x+y)%256,b=(x+y)%256;img.setPixel(x,y,0,r);img.setPixel(x,y,1,g);img.setPixel(x,y,2,b);} }
+
+// Filter 10: Detect edges
+void convertToGrayscale(Image &img){for(int y=0;y<img.height;y++) for(int x=0;x<img.width;x++){unsigned char g=(img(x,y,0)+img(x,y,1)+img(x,y,2))/3; img(x,y,0)=img(x,y,1)=img(x,y,2)=g;}}
+void detectEdges(Image &img){
     convertToGrayscale(img);
-    Image copy = img;
-
-    for (int y = 1; y < img.height - 1; ++y) {
-        for (int x = 1; x < img.width - 1; ++x) {
-            int gx = -copy(x-1,y-1,0) - 2*copy(x-1,y,0) - copy(x-1,y+1,0)
-                     + copy(x+1,y-1,0) + 2*copy(x+1,y,0) + copy(x+1,y+1,0);
-            int gy = -copy(x-1,y-1,0) - 2*copy(x,y-1,0) - copy(x+1,y-1,0)
-                     + copy(x-1,y+1,0) + 2*copy(x,y+1,0) + copy(x+1,y+1,0);
-
-            int magnitude = sqrt(gx*gx + gy*gy);
-            magnitude /= 1.5;
-            if (magnitude > 255) magnitude = 255;
-
-            unsigned char inverted = static_cast<unsigned char>(255 - magnitude);
-            img(x,y,0) = img(x,y,1) = img(x,y,2) = inverted;
+    Image copy=img;
+    for(int y=1;y<img.height-1;y++)
+        for(int x=1;x<img.width-1;x++){
+            int gx=-copy(x-1,y-1,0)-2*copy(x-1,y,0)-copy(x-1,y+1,0)+copy(x+1,y-1,0)+2*copy(x+1,y,0)+copy(x+1,y+1,0);
+            int gy=-copy(x-1,y-1,0)-2*copy(x,y-1,0)-copy(x+1,y-1,0)+copy(x-1,y+1,0)+2*copy(x,y+1,0)+copy(x+1,y+1,0);
+            int mag=sqrt(gx*gx+gy*gy)/1.5;
+            if(mag>255) mag=255;
+            unsigned char inv=255-mag;
+            img(x,y,0)=img(x,y,1)=img(x,y,2)=inv;
         }
+}
+
+// Filter 11: Resize
+void ResizingImages(Image &img){
+    int w,h; double ratio;
+    cout<<"Resize by 1.New dims 2.Ratio: "; int m; cin>>m;
+    if(m==1){cout<<"Enter new width height: "; cin>>w>>h;}
+    else{cout<<"Enter ratio: "; cin>>ratio; w=img.width*ratio; h=img.height*ratio;}
+    Image resized(w,h);
+    double scaleX=(double)img.width/w, scaleY=(double)img.height/h;
+    for(int y=0;y<h;y++) for(int x=0;x<w;x++) for(int c=0;c<img.channels;c++)
+        resized(x,y,c)=img((int)(x*scaleX),(int)(y*scaleY),c);
+    img=resized;
+}
+void ResizingImages(Image &img,int newW,int newH){
+    Image resized(newW,newH);
+    double scaleX=(double)img.width/newW, scaleY=(double)img.height/newH;
+    for(int y=0;y<newH;y++) for(int x=0;x<newW;x++) for(int c=0;c<img.channels;c++)
+        resized(x,y,c)=img((int)(x*scaleX),(int)(y*scaleY),c);
+    img=resized;
+}
+
+// Filter 12: Blur
+void blur(Image &img,int r=10){
+    Image temp=img;
+    for(int y=r;y<img.height-r;y++) for(int x=r;x<img.width-r;x++){
+        int sr=0,sg=0,sb=0,count=0;
+        for(int dy=-r;dy<=r;dy++) for(int dx=-r;dx<=r;dx++){
+            sr+=temp.getPixel(x+dx,y+dy,0); sg+=temp.getPixel(x+dx,y+dy,1); sb+=temp.getPixel(x+dx,y+dy,2); count++;
+        }
+        img.setPixel(x,y,0,sr/count); img.setPixel(x,y,1,sg/count); img.setPixel(x,y,2,sb/count);
     }
 }
-void rotate(Image &newimg ,int angle) {
-    int w = newimg.width;
-    int h = newimg.height;
-    int c = newimg.channels;
-    if (angle == 90) {
-        Image rotated;
-        rotated.width = h;
-        rotated.height = w;
-        rotated.channels = c;
-        if (rotated.imageData) {
-            delete[] rotated.imageData;
-        }
-        rotated.imageData = new unsigned char [w*h*c];
 
-        for (int y=0;y<h;y++) {
-            for (int x=0;x<w;x++) {
-                for (int z=0;z<c;z++) {
-                    rotated(y,w-1-x,z) = newimg(x,y,z);
-                }
-            }
-        }
-        newimg = rotated;
+// Check valid extension
+bool isValidExtension(const string &name) {
+    if (name.length() < 4) return false;
+    string ext = name.substr(name.length() - 4);
+    return ext == ".jpg" || ext == ".png" || ext == ".bmp";
+}
 
-    }
-    else if (angle == 180) {
-        Image rotated;
-        rotated.width = w;
-        rotated.height = h;
-        rotated.channels = c;
-        if (rotated.imageData) {
-            delete[] rotated.imageData;
-        }
-        rotated.imageData = new unsigned char [w*h*c];
-        for (int y=0;y<h;y++) {
-            for (int x=0;x<w;x++) {
-                for (int z=0;z<c;z++) {
-                    rotated(w-1-x,h-1-y,z) = newimg(x,y,z);
-                }
-            }
-        }
-        newimg = rotated;
+// Print menu
+void printMenu() {
+    cout << "\nMenu Options:\n"
+         << "1. Grayscale\n2. Black & White\n3. Invert\n4. Merge\n5. Flip\n"
+         << "6. Rotate\n7. Light/Dark\n8. Crop\n9. Frame\n10. Detect Edges\n"
+         << "11. Resize\n12. Blur\n13. Load New Image\n14. Save Image\n15. Exit\n";
+}
 
-    }
-    else if (angle == 270) {
-        Image rotated;
-        rotated.width = h;
-        rotated.height = w;
-        rotated.channels = c;
-        if (rotated.imageData) {
-            delete[] rotated.imageData;
-        }
-        rotated.imageData = new unsigned char [w*h*c];
-        for (int y=0;y<h;y++) {
-            for (int x=0;x<w;x++) {
-                for (int z=0;z<c;z++) {
-                    rotated(h-1-y,x,z) = newimg(x,y,z);
-                }
+// Save current image with checking extension
+void saveImageWithCheck(Image &img, const string &currentFile) {
+    cin.ignore();
+    string saveName;
+    cout << "Enter file name to save (or press Enter to use current): ";
+    getline(cin, saveName);
+    if (saveName.empty()) saveName = currentFile;
 
-            }
-        }
-
-    newimg = rotated;}
+    if (!isValidExtension(saveName)) cout << "Invalid extension! Save aborted.\n";
     else {
-        return;
-    }
-
-}
-void invert(Image &newimg) {
-    int w = newimg.width;
-    int h = newimg.height;
-    int c = newimg.channels;
-    for (int y=0;y<h;y++) {
-        for (int x=0;x<w;x++) {
-            for (int z=0;z<c;z++) {
-                newimg(x,y,z) = 255- newimg(x,y,z);
-            }
-        }
+        img.saveImage(saveName);
+        cout << "Image saved successfully!\n";
     }
 }
-void blur(Image &newimg , int r =10) {
-    int w = newimg.width;
-    int h = newimg.height;
-    Image temb=newimg;
-    for (int y=r;y<h-r;y++) {
-        for (int x=r;x<w-r;x++) {
-            int sumr=0;
-            int sumg=0;
-            int sumb=0;
-            int count=0;
-            for (int dy = -r;dy<=r;dy++) {
-                for (int dx = -r;dx<=r;dx++) {
-                    sumr +=temb.getPixel(x+dx,y+dy,0);
-                    sumg +=temb.getPixel(x+dx,y+dy,1);
-                    sumb +=temb.getPixel(x+dx,y+dy,2);
-                    count++;
 
-                }
-            }
-            newimg.setPixel(x,y,0,sumr/count);
-            newimg.setPixel(x,y,1,sumg/count);
-            newimg.setPixel(x,y,2,sumb/count);
-        }
+// Load new image
+bool loadNewImage(Image &img, string &filename) {
+    char saveBefore;
+    cout << "Do you want to save the current image before loading a new one? (y/n): ";
+    cin >> saveBefore;
+    if (saveBefore=='y'||saveBefore=='Y') saveImageWithCheck(img, filename);
+
+    cout << "Enter new image file name: ";
+    cin >> filename;
+    if (!isValidExtension(filename) || !img.loadNewImage(filename)) {
+        cout << "Invalid file or file does not exist. Current image unchanged.\n";
+        return false;
     }
+    return true;
 }
-void frame(Image &newimg, int t=20) {
-    int w = newimg.width;
-    int h = newimg.height;
-    for (int y=0;y<h;y++) {
-        for (int x=0;x<w;x++) {
-            if (x <t||x>=w-t||y <t||y>=h-t) {
-                newimg.setPixel(x,y,0,100);
-                newimg.setPixel(x,y,1,25);
-                newimg.setPixel(x,y,2,90);
-            }
-        }
-    }
-}
-void frameb(Image &newimg, int t=20) {
-    int w = newimg.width;
-    int h = newimg.height;
-    for (int y=0;y<h;y++) {
-        for (int x=0;x<w;x++) {
-            if (x<t||x>=w-t||y <t||y>=h-t) {
-                int r=100;
-                int g=(x+y)%256;
-                int b=(y+x)%256;
 
-                newimg.setPixel(x,y,0,r);
-                newimg.setPixel(x,y,1,g);
-                newimg.setPixel(x,y,2,b);
+int main() {
+    string filename;
+    cout << "Enter image file to work on: ";
+    cin >> filename;
 
-            }
-        }
-    }
-}int main(){
-    string filename ;
-    cout << "Enter image file name " ;
-    cin >> filename ;
+    if (!isValidExtension(filename)) { cout << "Invalid file extension.\n"; return 1; }
 
     Image img(filename);
-    if (!img.loadNewImage(filename)) {
-        cout << "File does not exist";
-        return 1 ;
-    }
-    cout << "Choose filter:\n"
-            << "1: Grayscale Conversion\n"
-            << "2: Black and White\n"
-            << "3: Invert Image\n"
-            << "4: Merge Images\n"
-            << "5: Flip Image\n"
-            << "6: Rotate Image\n"
-            << "7: Darken and Lighten Image\n"
-            << "8: Crop Image\n"
-            << "9: Adding a Frame to the Picture\n"
-            << "10: Detect Image Edges\n"
-            << "11: Resizing Images\n"
-            << "12: Blur Image\n";
+    if (!img.loadNewImage(filename)) { cout << "File does not exist.\n"; return 1; }
 
-
-    int n ;
+    while (true) {
+    printMenu();
+    int n;
     cin >> n;
-    if (n == 6) {
-        int a;
-        cout<<"select your angle ( 90 , 180 , 270 , 360 )"<<endl;
-        cin>>a;
-        rotate(img,a);
-        img.saveImage("after_editing.png");
-    }
-    if (n == 3) {
-        invert(img);
-        img.saveImage("after_inverted.png");
-    }
-    if (n==9) {
-        int y;
-        cout<<"IF you want a simple frame enter: 1 \n"
-            <<"IF you want a decorated frame: 2 \n";
-        cin>>y;
-        if (y==1) {
-            frame(img);
-            img.saveImage("after_frame.png");
-        }
-        if (y==2) {
-            frameb(img);
-            img.saveImage("after_frame.png");
-        }
 
-
-    }
-
-    if (n == 12) {
-        blur(img);
-        img.saveImage("after_blured.png");
-    }
-
-    if (n == 1) {
-        Grayscale(img);
-        cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
-    }
+    if (n == 1) Grayscale(img);
+    else if (n == 2) BlackandWhite(img);
+    else if (n == 3) invert(img);
     else if (n == 4) {
-        string file2;
-        cout << "Enter second image file name: ";
-        cin >> file2;
+        string file2; cout << "Second image file: "; cin >> file2;
         Image img2(file2);
-        if (!img2.loadNewImage(file2)) {
-            cout << "Error: Second file not found.\n";
-            return 1;
-        }
-        Image result(0, 0);
-        mergeImages(img, img2, result);
-        cout << "Enter output file name: ";
-        cin >> filename;
-        result.saveImage(filename);
+        if (!img2.loadNewImage(file2)) cout << "File not exist.\n";
+        else { Image res(0,0); mergeImages(img,img2,res); img=res; }
     }
-    else if (n == 7) {
-        double percent;
-        cout << "Enter lighting change (-50 to 50): ";
-        cin >> percent;
-        filterLightDark(img, percent);
-        cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
+    else if (n == 5) FlipImage(img);
+    else if (n == 6) { int angle; cout << "Angle 90/180/270: ";cin >> angle; rotate(img, angle); }
+    else if (n == 7) { double p; cout << "Light/Dark %: "; cin >> p; filterLightDark(img, p); }
+    else if (n == 8) CropImages(img);
+    else if (n == 9) {
+        int f; cout << "Frame 1=simple 2=fancy: "; cin >> f;
+        if(f==1) frame(img); else if(f==2) frameb(img);
     }
-    else if (n == 10) {
-        detectEdges(img);
-        cout << "Enter new file name: ";
-        cin >> filename;
-        img.saveImage(filename);
-        cout << "Edge detection done!\n";
+    else if (n == 10) detectEdges(img);
+    else if (n == 11) ResizingImages(img);
+    else if (n == 12) blur(img);
+    else if (n == 13) loadNewImage(img, filename);
+    else if (n == 14) saveImageWithCheck(img, filename);
+    else if (n == 15) {
+        char saveBeforeExit; cout << "Save before exit? (y/n): "; cin >> saveBeforeExit;
+        if(saveBeforeExit=='y'||saveBeforeExit=='Y') saveImageWithCheck(img, filename);
+        cout << "Exiting program.\n"; break;
     }
-
-   
-   
-   
-
-   
-
-             if (n==2){
-                 BlackandWhite(img);
-                 img.saveImage("output.png");
-                 cout << "Saved output.png\n";
-             }
-
-             else if(n==5){
-                 FlipImage(img);
-                 img.saveImage("output.png");
-                 cout << "Saved output.png\n";
-             }
-             else if(n==8){
-                 CropImages(img);
-                 img.saveImage("output.png");
-                 cout << "Saved output.png\n";
-             }
-             else if(n==11){
-                 ResizingImages(img);
-                 img.saveImage("output.png");
-                 cout << "Saved output.png\n";
-             }
+    else cout << "Invalid choice!\n";
+}
 
 
     return 0;
