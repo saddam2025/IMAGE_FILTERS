@@ -492,11 +492,11 @@ void frameb(Image &newimg, int t=20) {
         cout << "Edge detection done!\n";
     }
 
-    else {
-        cout << "Invalid option!\n";
-    }
+   
+   
+   
 
-    cout << "Edge detection done! Saved as " << filename << endl;
+   
 
              if (n==2){
                  BlackandWhite(img);
