@@ -26,7 +26,7 @@ void BlackandWhite(Image &img) {
     int height = img.height;
     int channels = img.channels;
     for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
+    for (int x = 0; x < width; x++) {
             unsigned char r = img(x, y, 0);
             unsigned char g = img(x, y, 1);
             unsigned char b = img(x, y, 2);
@@ -180,7 +180,7 @@ void CropImages(Image &img) {
     int height = img.height;
     int channels = img.channels;
     int x, y, w, h;
-    cout << "Enter start x y: ";
+    cout << "Enter start point x, y: ";
     cin >> x >> y;
     cout << "Enter width height: ";
     cin >> w >> h;
@@ -189,9 +189,10 @@ void CropImages(Image &img) {
         return;
     }
     Image cropped(w, h);
-    for (int i = 0; i < h; i++) {
-        for (int j = 0; j < w; j++) {
-            for (int c = 0; c < channels; c++) {
+    
+    for (int i = 0; i< h; i++) {
+        for (int j= 0; j< w; j++) {
+            for (int c= 0; c < channels; c++) {
                 cropped(j, i, c) = img(j+x, i+y, c);
             }
         }
@@ -263,23 +264,25 @@ void ResizingImages(Image &img) {
     int width = img.width;
     int height = img.height;
     int channels = img.channels;
-    cout << "Resize by 1.New dims 2.Ratio: ";
+    cout << "choose resize by: 1.New dimensions \n 2.Ratio: ";
     int m;
     cin >> m;
     int w, h;
     if (m == 1) {
-        cout << "Enter new width height: ";
+        cout << "Enter new width and height: ";
         cin >> w >> h;
-    } else {
+    }
+    else if(m==2) {
         double ratio;
-        cout << "Enter ratio: ";
+        cout << "Enter the ratio: ";
         cin >> ratio;
         w = width*ratio;
         h = height*ratio;
     }
     Image resized(w, h);
-    double scaleX = (double)width / w;
-    double scaleY = (double)height / h;
+    
+    double scaleX = width / w;
+    double scaleY = height / h;
     for (int y = 0; y < h; y++) {
         for (int x = 0; x < w; x++) {
             for (int c = 0; c < channels; c++) {
