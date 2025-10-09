@@ -55,6 +55,7 @@ void invert(Image &img) {
 }
 
 // Filter 4: Merge Images
+void ResizingImages(Image &img, int newW, int newH);
 void mergeImages(Image &img1, Image &img2, Image &result) {
     if (img1.width != img2.width || img1.height != img2.height) {
         if (img1.width*img1.height > img2.width*img2.height)
