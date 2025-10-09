@@ -55,25 +55,6 @@ void invert(Image &img) {
 }
 
 // Filter 4: Merge Images
-void ResizingImages(Image &img, int newW, int newH) {
-    int width = img.width;
-    int height = img.height;
-    int channels = img.channels;
-    Image resized(newW, newH);
-    double scaleX = (double)width / newW;
-    double scaleY = (double)height / newH;
-    for (int y = 0; y < newH; y++) {
-        for (int x = 0; x < newW; x++) {
-            for (int c = 0; c < channels; c++) {
-                int oldX = (int)(x * scaleX);
-                int oldY = (int)(y * scaleY);
-                resized(x, y, c) = img(oldX, oldY, c);
-            }
-        }
-    }
-    img = resized;
-}
-
 void mergeImages(Image &img1, Image &img2, Image &result) {
     if (img1.width != img2.width || img1.height != img2.height) {
         if (img1.width*img1.height > img2.width*img2.height)
