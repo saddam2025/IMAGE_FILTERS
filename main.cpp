@@ -91,16 +91,39 @@ void invert(Image &img) {
         }
     }
 }
+// Resize helper:
+void ResizeTo(Image &img, int newW, int newH) {
+    int width = img.width;
+    int height = img.height;
+    int channels = img.channels;
+
+    Image resized(newW, newH);
+
+    double scaleX = (double)width / newW;
+    double scaleY = (double)height / newH;
+
+    for (int y = 0; y < newH; y++) {
+        for (int x = 0; x < newW; x++) {
+            for (int c = 0; c < channels; c++) {
+                int oldX = (int)(x * scaleX);
+                int oldY = (int)(y * scaleY);
+                resized(x, y, c) = img(oldX, oldY, c);
+            }
+        }
+    }
+
+    img = resized;
+}
 
 // Filter 4: Merge Images
-void ResizingImages(Image &img, int newW, int newH);
 void mergeImages(Image &img1, Image &img2, Image &result) {
     if (img1.width != img2.width || img1.height != img2.height) {
         if (img1.width*img1.height > img2.width*img2.height)
-            ResizingImages(img1, img2.width, img2.height);
+            ResizeTo(img1, img2.width, img2.height);
         else
-            ResizingImages(img2, img1.width, img1.height);
+            ResizeTo(img2, img1.width, img1.height);
     }
+
     result = Image(img1.width, img1.height);
     for (int y = 0; y < img1.height; y++) {
         for (int x = 0; x < img1.width; x++) {
@@ -110,7 +133,6 @@ void mergeImages(Image &img1, Image &img2, Image &result) {
         }
     }
 }
-
 // Filter 5: Flip Image
 void FlipImage(Image &img) {
     int width = img.width;
@@ -377,7 +399,6 @@ void printMenu() {
          << "6. Rotate\n7. Light/Dark\n8. Crop\n9. Frame\n10. Detect Edges\n"
          << "11. Resize\n12. Blur\n13. Load New Image\n14. Save Image\n15. Exit\n";
 }
-
 // Main function
 int main() {
     string filename;
