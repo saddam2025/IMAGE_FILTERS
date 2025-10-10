@@ -1,3 +1,39 @@
+/******************************************************************************
+* *
+* PROJECT FINAL SUBMISSION HEADER                        *
+* *
+***************************************************************************
+* *
+* [A] - TEAM DETAILS & SECTION:                                              *
+* *
+* Section: All-b                                                  *
+* * CS-213
+* Team Member 1: Name: Abdelrahman Mohsen Zagloul        | ID: 20242205                        *
+* Team Member 2: Name: Yasmin Hesham fouad               | ID: 20240659                        *
+* Team Member 3: Name: Nada Ahmed Abdelrauf              | ID: 20240627                        *                        *
+* *
+***************************************************************************
+* *
+* [B] - WORK BREAKDOWN                                        *
+* *
+* -> Abdelrahman Mohsen Zagloul: Implemented the 'Invert,Rotation,Blur and frame filters'.       *
+* -> Yasmin Hesham fouad: Developed the main 'Black&White,Flip Image, Crop Images and Resizing Images filters.  *
+* -> Nada Ahmed Abdelrauf: Implemented the 'Grayscale,Merge,Light&Dark and Detect edge'.   *
+* *
+***************************************************************************
+* *
+* [C] - VIDEO DEMO LINK :                                  *
+* *
+* Link: https://drive.google.com/drive/folders/1rJLK7P_R_xrF9EjemnkM4Mv_7Yec7iFC?usp=drive_link
+* *
+***************************************************************************
+* *
+* [D] - SHARED DOCUMENT LINK :
+* *
+* Link: https://1drv.ms/w/c/e23a7fdb4a3f1ac2/EdEykHHELnNFpynFkeLsYEwBCJEEXqoubEtSI3D3PJet-w
+* *
+******************************************************************************/
+
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -442,4 +478,3 @@ int main() {
 
     return 0;
 }
-
